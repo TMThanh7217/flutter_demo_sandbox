@@ -25,6 +25,20 @@ class MyAppState extends ChangeNotifier {
     favorites.remove(pair);
     notifyListeners();
   }
+
+  bool isFavorited = true;
+  int favoriteCount = 41;
+
+  void toggleLikeFavorite() {
+    if (isFavorited) {
+      favoriteCount -= 1;
+      isFavorited = false;
+    } else {
+      favoriteCount += 1;
+      isFavorited = true;
+    }
+    notifyListeners();
+  }
 }
 
 class GeneratorPage extends StatelessWidget {

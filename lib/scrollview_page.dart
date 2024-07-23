@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_application_1/word_pair.dart';
+
 
 class PageScrollView extends StatelessWidget {
   const PageScrollView({super.key});
@@ -50,11 +53,9 @@ class TitleSection extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            /*1*/
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /*2*/
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
@@ -73,7 +74,6 @@ class TitleSection extends StatelessWidget {
               ],
             ),
           ),
-          /*3*/
           const FavoriteWidget(),
         ],
       ),
@@ -167,53 +167,43 @@ class TextSection extends StatelessWidget {
   }
 }
 
-class FavoriteWidget extends StatefulWidget {
+class FavoriteWidget extends StatelessWidget {
   const FavoriteWidget({super.key});
 
   @override
-  State<FavoriteWidget> createState() => _FavoriteWidgetState();
-}
-
-class _FavoriteWidgetState extends State<FavoriteWidget> {
-  bool _isFavorited = true;
-  int _favoriteCount = 41;
-
-  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(0),
-          child: IconButton(
-            padding: const EdgeInsets.all(0),
-            alignment: Alignment.center,
-            icon: (_isFavorited
-                ? const Icon(Icons.star)
-                : const Icon(Icons.star_border)),
-            color: Colors.red[500],
-            onPressed: _toggleFavorite,
-          ),
-        ),
-        SizedBox(
-          width: 18,
-          child: SizedBox(
-            child: Text('$_favoriteCount'),
-          ),
-        ),
-      ],
-    );
-  }
+    var appState = context.watch<MyAppState>();
+    bool isFavorited = appState.isFavorited;
+    int favoriteCount = appState.favoriteCount;
 
-  void _toggleFavorite() {
-    setState(() {
-      if (_isFavorited) {
-        _favoriteCount -= 1;
-        _isFavorited = false;
-      } else {
-        _favoriteCount += 1;
-        _isFavorited = true;
+    return Builder(
+      builder: (context) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(0),
+              child: IconButton(
+                padding: const EdgeInsets.all(0),
+                alignment: Alignment.center,
+                icon: (isFavorited
+                    ? const Icon(Icons.star)
+                    : const Icon(Icons.star_border)),
+                color: Colors.red[500],
+                onPressed: () {
+                  appState.toggleLikeFavorite();
+                },
+              ),
+            ),
+            SizedBox(
+              width: 18,
+              child: SizedBox(
+                child: Text('$favoriteCount'),
+              ),
+            ),
+          ],
+        );
       }
-    });
+    );
   }
 }
