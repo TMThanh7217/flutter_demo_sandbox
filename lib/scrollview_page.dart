@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_1/word_pair.dart';
 
+class ScrollviewPageState extends ChangeNotifier {
+  bool isFavorited = true;
+  int favoriteCount = 41;
 
+  void toggleLikeFavorite() {
+    if (isFavorited) {
+      favoriteCount -= 1;
+      isFavorited = false;
+    } else {
+      favoriteCount += 1;
+      isFavorited = true;
+    }
+    notifyListeners();
+  }
+}
 class PageScrollView extends StatelessWidget {
   const PageScrollView({super.key});
 
@@ -172,7 +185,7 @@ class FavoriteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+    var appState = context.watch<ScrollviewPageState>();
     bool isFavorited = appState.isFavorited;
     int favoriteCount = appState.favoriteCount;
 
